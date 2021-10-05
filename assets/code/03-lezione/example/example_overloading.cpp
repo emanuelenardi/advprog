@@ -18,7 +18,7 @@ void my_swap(string &f, string &s) {
 }
 
 int main() {
-    // esempio scambio fra stringhe
+    // scambio fra stringhe
     string a, b;
     a = "hello";
     b = "world";
@@ -29,7 +29,7 @@ int main() {
     cout << "after a = " << a << " b = " << b << endl;
     // a = world, b = hello
 
-    // esempio scambio fra interi    
+    // scambio fra interi    
     int x, y;
     x = 33;
     y = 44;
@@ -38,7 +38,7 @@ int main() {
     my_swap(x, y);
     cout << "after x = " << x << " by = " << y << endl; // x = 44, y = 33
     
-    // esempio scambio fra decimali
+    // scambio fra decimali
     double d1, d2;
     d1 = 3.3;
     d2 = 4.4;

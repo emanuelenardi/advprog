@@ -6,8 +6,9 @@
 \institute{%
     \textbf{Obiettivi di apprendimento}:
     \begin{itemize}
-        \item Ridefinizione degli operatori;
-        \item ereditarietà.
+        \item Come si effettua l'\foreign{overloading} degli operatori;
+        \item Ereditarietà in \cplusplus.
+        \item Cosa sono e come si definizione le classi puramente virtuali.
     \end{itemize}%
 }
 
@@ -22,22 +23,28 @@
 
 \section{Esempio dei complessi}
 
-\begin{frame}[fragile]{\texttt{complesso.h}}
+\begin{frame}[t, fragile]{\texttt{complesso.h}}
 
 \begin{columns}
     \column{\dimexpr\paperwidth-30pt}
+    
     \only<1>{\cppfilepath[lastline=21]{complex/complesso.h}}
+    
     \only<2>{\cppfilepath[firstline=23]{complex/complesso.h}}
+    
 \end{columns}
 \vspace*{\fill}
 
 \end{frame}
 
-\begin{frame}[fragile]{\texttt{complesso.cpp}}
+\begin{frame}[t, fragile]{\texttt{complesso.cpp}}
 
     \only<1>{\cppfilepath[firstline=1, lastline=17]{complex/complesso.cpp}}
+    
     \only<2>{\cppfilepath[firstline=19, lastline=34]{complex/complesso.cpp}}
+    
     \only<3>{\cppfilepath[firstline=36, lastline=52]{complex/complesso.cpp}}
+    
     \only<4>{\cppfilepath[firstline=54, lastline=74]{complex/complesso.cpp}}
 
 \end{frame}
@@ -61,7 +68,7 @@
 
 \begin{frame}{Ereditarietà in \cplusplus}
     \begin{itemize}
-        \item Esistono tipi di ereditarietà: \texttt{public}, \texttt{private}, \texttt{protected};
+        \item Esistono tre di ereditarietà: \texttt{public}, \texttt{private}, \texttt{protected};
         \item le stesse \foreign{keywords} della visibilità nella classe;
     \end{itemize}
     
@@ -149,20 +156,20 @@ I metodi possono essere definiti \texttt{virtual}.
 
 \end{frame}
 
-\begin{frame}[fragile]{Esempio di \alert{classe base}: \texttt{a.cpp}}
+\begin{frame}[t, fragile]{Esempio di \alert{classe base}: \texttt{a.cpp}}
 
     \only<1>{\cppfilepath[lastline=20]{inheritance/a.cpp}}
     \only<2>{\cppfilepath[firstline=22]{inheritance/a.cpp}}
 
 \end{frame}
 
-\begin{frame}[fragile]{Esempio di \alert{classe derivata}: \texttt{b.h}}
+\begin{frame}[t, fragile]{Esempio di \alert{classe derivata}: \texttt{b.h}}
 
     \only<1>{\cppfilepath{inheritance/b.h}}
 
 \end{frame}
 
-\begin{frame}[fragile]{Esempio di \alert{classe derivata}: \texttt{b.cpp}}
+\begin{frame}[t, fragile]{Esempio di \alert{classe derivata}: \texttt{b.cpp}}
 
     \only<1>{\cppfilepath[lastline=17]{inheritance/b.cpp}}
     \only<2>{\cppfilepath[firstline=19]{inheritance/b.cpp}}
@@ -172,8 +179,8 @@ I metodi possono essere definiti \texttt{virtual}.
 \begin{frame}{Esempio di classe \alert{\texttt{main}}: \texttt{main.cpp}}
     
     \only<1>{\cppfilepath[lastline=7]{inheritance/main.cpp}}
-    \only<2>{\cppfilepath[firstline=9, lastline=27]{inheritance/main.cpp}}
-    \only<3>{\cppfilepath[firstline=29]{inheritance/main.cpp}}
+    \only<2>{\cppfilepath[firstline=10, lastline=27]{inheritance/main.cpp}}
+    \only<3>{\cppfilepath[firstline=30]{inheritance/main.cpp}}
     
 \end{frame}
 

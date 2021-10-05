@@ -12,7 +12,7 @@
     \end{itemize}%
 }
 
-% \includeonlyframes{current}
+\includeonlyframes{current}
 
 % arara: xelatex: { synctex: no }
 % arara: xelatex: { synctex: yes }
@@ -21,43 +21,49 @@
 
 \frame{\titlepage}
 
-\section*{Riepilogo ultima lezione}
-\begin{frame}{Riepilogo ultima lezione}
+\section*{Riassunto lezione precedente}
+
+\begin{frame}{Argomenti trattati nell'ultima lezione}
 \begin{itemize}
-    \item \foreign{overloading} degli operatori;
-    \item \textbf{inheritance}.
+    \item Come si effettua l'\foreign{overloading} degli operatori;
+    \item Ereditarietà in \cplusplus;
+    \item Cosa sono e come si definizione le classi puramente virtuali.
 \end{itemize}
+
 \end{frame}
 
 \Sommario
 
 \section{Programmazione generica}
 
+\subsection*{Che cos'è la programmazione generica}
+
 \begin{frame}{Programmazione generica}
 
-    \alert<1>{Si intende la possibilità data da un linguaggio di rappresentare tipi e implementare algoritmi che abbiano un tipo come parametro.}
+    \alert<1>{Si intende la possibilità data da un linguaggio di \textbf{rappresentare tipi e implementare algoritmi che abbiano un tipo come parametro}.}
 
     \pause
 
     \alert<2>{Il tipo parametrico viene poi specificato:
     \begin{itemize}
         \item a tempo di \textbf{compilazione} (es.\ \texttt{templates} in \cplusplus);
-        \item a tempo di \textbf{esecuzione} (es. \texttt{generics} in Java).
+        \item a tempo di \textbf{esecuzione} (es. \texttt{generics} in \textsf{\textbf{Java}}).
     \end{itemize}}
     
     \pause
     
-    \alert<3>{\begin{block}{Scopo}
-    Implementare algoritmi che siano indipendenti dal tipo su cui operano (\enquote{generici} appunto).
+    \alert<3>{\begin{block}{Qual è lo scopo?}
+    Implementare algoritmi che siano \textbf{indipendenti dal tipo su cui operano} (\enquote{generici} appunto).
     \end{block}}
     
     \pause
     
-    \alert<4>{Idealmente al massimo livello di astrazione possibile, prendiamo come esempio lo \foreign{swapping} di variabili.}
+    \alert<4>{Idealmente al \textbf{massimo livello di astrazione possibile}.
+    Prendiamo come esempio lo \foreign{swapping} di variabili.}
 
 \end{frame}
 
-\subsection*{Esempio di scambio di variabili}°
+\subsection*{Esempio di scambio di variabili}
 
 \begin{frame}[t, fragile]
 
@@ -72,30 +78,51 @@
         \cppfilepath[firstline=41]{example/example_overloading.cpp}
         
         \begin{alertblock}{Attenzione}
-        Non è possibile effettuare la conversione automatica fra \texttt{double} e \texttt{int}.
+        Non è possibile effettuare la conversione automatica fra \texttt{double} e \texttt{\&int}.
         \end{alertblock}%
     }
 
 \end{frame}
 
-\subsection{Conversione di tipo (\texorpdfstring{\foreign{type conversion}}{type conversion})}
+% \subsection{Conversione di tipo (\texorpdfstring{\foreign{type conversion}}{type conversion})}
 
-\begin{frame}{La conversione di tipo}
+% \begin{frame}[t]{Le conversioni di tipo [1/2]}
 
-% https://en.wikipedia.org/wiki/Type_conversion
-% type conversion,[1][2] type casting,[1][3] type coercion,[3] and type juggling[4][5] are different ways of changing an expression from one data type to another. An example would be the conversion of an integer value into a floating point value or its textual representation as a string, and vice versa. Type conversions can take advantage of certain features of type hierarchies or data representations. Two important aspects of a type conversion are whether it happens implicitly (automatically) or explicitly,[1][6] and whether the underlying data representation is converted from one representation into another, or a given representation is merely reinterpreted as the representation of another data type.[6][7] In general, both primitive and compound data types can be converted.
+% \alert<1>{\textbf{\foreign{type conversion}}, \textbf{\foreign{type casting}}, \textbf{\foreign{type coercion}}, e \textbf{\foreign{type juggling}} sono modi diversi di cambiare un'espressione da un tipo di dati a un altro.}
+% \pause
+% \alert<2>{Un esempio potrebbe essere la conversione di un valore intero in un valore in virgola mobile o la sua rappresentazione testuale come una stringa, e viceversa.}
+% \pause
+% \alert<3>{Le conversioni di tipo \textbf{possono sfruttare} alcune caratteristiche delle gerarchie dei tipi o delle rappresentazioni dei dati.}
+% \pause
 
-% Each programming language has its own rules on how types can be converted. Languages with strong typing typically do little implicit conversion and discourage the reinterpretation of representations, while languages with weak typing perform many implicit conversions between data types. Weak typing language often allow forcing the compiler to arbitrarily interpret a data item as having different representations—this can be a non-obvious programming error, or a technical method to directly deal with underlying hardware.
+% \alert<4>{Due aspetti importanti di una conversione di tipo sono se avviene \textbf{implicitamente} (automaticamente) o \textbf{esplicitamente}, e se \textbf{la rappresentazione dei dati sottostante viene convertita da una rappresentazione in un'altra}, o \textbf{se una data rappresentazione è semplicemente reinterpretata} come la rappresentazione di un altro tipo di dati.}
+% % In generale, possono essere convertiti sia i tipi di dati primitivi che composti.
 
-% In most languages, the word coercion is used to denote an implicit conversion, either during compilation or during run time. For example, in an expression mixing integer and floating point numbers (like 5 + 0.1), the compiler will automatically convert integer representation into floating point representation so fractions are not lost. Explicit type conversions are either indicated by writing additional code (e.g. adding type identifiers or calling built-in routines) or by coding conversion routines for the compiler to use when it otherwise would halt with a type mismatch.
+% \end{frame}
 
-\end{frame}
+% \begin{frame}[t]{Le conversioni di tipo [2/2]}
+
+% Ogni linguaggio di programmazione ha le sue regole su come i tipi possono essere convertiti.
+% I linguaggi con tipizzazione forte (\foreign{strong typing}) in genere eseguono poche conversioni implicite e scoraggiano la reinterpretazione delle rappresentazioni, mentre i linguaggi con tipizzazione debole (\foreign{weak typing}) eseguono molte conversioni implicite tra i tipi di dati.
+% Un linguaggio con tipizzazione debole spesso consente di forzare il compilatore a interpretare arbitrariamente un elemento con rappresentazioni diverse, questo può essere un errore di programmazione non ovvio o un metodo tecnico per gestire direttamente l'hardware sottostante.
+% \pause
+
+% Nella maggior parte delle lingue, la parola \enquote{coercizione} (\textbf{\foreign{coercion}}) \textbf{viene utilizzata per denotare una conversione implicita}, sia durante la compilazione che durante il \foreign{runtime}.
+% \pause
+% Ad esempio, in un'espressione che mescola numeri interi e in virgola mobile (come \texttt{5 + 0.1}), il compilatore convertirà automaticamente la rappresentazione intera in rappresentazione in virgola mobile in modo che le frazioni non vengano perse.
+% \pause
+% \textbf{Le conversioni di tipo esplicite sono indicate scrivendo codice aggiuntivo} (ad esempio aggiungendo identificatori di tipo o chiamando funzioni integrate) o scrivendo funzioni di conversione per il compilatore da utilizzare quando, in assenza delle stesse, il compilatore interromperebbe l'esecuzione con una mancata corrispondenza del tipo (\foreign{type mismatch}).
+
+% % https://en.wikipedia.org/wiki/Type_conversion
+
+% \end{frame}
 
 \subsubsection{Conversione di tipo nei linguaggi \texttt{C}}
 
-\begin{frame}[t, fragile]{La conversione di tipo}
+\begin{frame}[t, fragile]{La conversione di tipo nei linguaggi \texttt{C}}
 
-% In the C family of languages and ALGOL 68, the word cast typically refers to an explicit type conversion (as opposed to an implicit conversion), causing some ambiguity about whether this is a re-interpretation of a bit-pattern or a real data representation conversion. More important is the multitude of ways and rules that apply to what data type (or class) is located by a pointer and how a pointer may be adjusted by the compiler in cases like object (class) inheritance.
+Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce tipicamente ad una conversione di tipo esplicita (al contrario di una conversione implicita), causando qualche ambiguità sul fatto che si tratti di una reinterpretazione di un \foreign{bit-pattern} o di una conversione di rappresentazione di dati reali.
+% More important is the multitude of ways and rules that apply to what data type (or class) is located by a pointer and how a pointer may be adjusted by the compiler in cases like object (class) inheritance.
 
 \uncover<+>{\cplusplus è un \textbf{linguaggio fortemente tipato}.
 \textbf{Molte conversioni}, soprattutto quelle che implicano una diversa interpretazione del valore, \textbf{richiedono una conversione esplicita}.}
