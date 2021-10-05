@@ -184,3 +184,27 @@
 \setcounter{tocdepth}{4}
 
 \newcommand{\addpage}{\addtocounter{framenumber}{1}}
+
+\newcommand{\Sommario}{
+\section*{Sommario}
+\begin{frame}{Sommario}
+    \tableofcontents[
+        pausesections,
+        subsubsectionstyle=hide
+    ]
+\end{frame}
+}
+
+\newcommand{\Riconoscimenti}{
+\begin{frame}{Riconoscimenti}
+L'ultima versione delle slides si trova sulla repository Github
+\begin{center}\Large
+    \href{https://www.github.com/emanuelenardi/advprog}{\faicon{code-fork} \textbf{github.com/emanuelenardi/beamer-advprog}}
+\end{center}
+
+Le slides sono state realizzate da \textbf{Emanuele Nardi} e sono rilasciate con licenza \doclicenseLongName.
+\begin{center}\large
+    \href{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it}{\doclicenseIcon}
+\end{center}
+\end{frame}
+}

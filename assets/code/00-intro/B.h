@@ -6,10 +6,10 @@ using namespace std;
 #define CLASSE_B #include <iostream>
 
 class B {
-      string s;
+    string s;
 public:
-      B(string _s);
-      string get_s();
+    B(string _s);
+    string get_s();
 };
 
 #endif
