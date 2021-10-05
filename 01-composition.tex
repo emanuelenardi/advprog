@@ -1,13 +1,15 @@
 \documentclass[xcolor={dvipsnames, svgnames, x11names, table}, 10pt]{beamer}
 \usepackage{./assets/preamble}
 
-\title{Composizione opzionale, Copia profonda, Conversione implicita di tipo, Ridefinizione degli operatori}
+\title{Composizione, Copia profonda \& altro}
 \date{21 settembre 2021}
 \institute{%
     \textbf{Obiettivi di apprendimento}:
     \begin{itemize}
-        \item test;
-        \item test.
+        \item Composizione opzionale;
+        \item Capire qual è la differenza fra copia profonda e copia superficiale;
+        \item Quando avviene la conversione implicita di tipo;
+        \item Come si ridefinizione gli operatori.
     \end{itemize}%
 }
 
@@ -36,7 +38,9 @@ Oggi:
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Metodi e operatori che esistono in una classe vuota}
+\begin{frame}[t, fragile]{Metodi e operatori che esistono in una classe vuota}
+
+\begin{minted}{cpp}
 class A {};
 
 main() {
@@ -48,6 +52,7 @@ main() {
     delete pa; // cancella il puntatore
     A::~A() // distruttore
 };
+\end{minted}
 
 \end{frame}
 
@@ -59,16 +64,16 @@ Soluzione con puntatore a B in A, la classe A ha la responsabilità di gestire l
 \end{frame}
 
 % \begin{frame}[fragile]{Differenza fra copia profonda e copia superficiale}
-Class A {
-    int i;
-}
-    A::A(const A&)
-    A& A::operator=(const A& a)
-// fanno una copia superficiale ovvero gli attributi dell'oggetto vengono copiati in questo caso i
-Class A {
-    int i;
-    B *pb;
-} // anche in questo caso viene copiato il valore contenuto in i e in pb.
+% Class A {
+%     int i;
+% }
+%     A::A(const A&)
+%     A& A::operator=(const A& a)
+% // fanno una copia superficiale ovvero gli attributi dell'oggetto vengono copiati in questo caso i
+% Class A {
+%     int i;
+%     B *pb;
+% } // anche in questo caso viene copiato il valore contenuto in i e in pb.
 
 %     Che cosa succede se il puntatore contiene un indirizzo ottenuto tramite una new e di cui la classe A è responsabile (come nel caso della composizione opzionale)?
     
