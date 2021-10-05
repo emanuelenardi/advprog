@@ -1,0 +1,362 @@
+\documentclass[xcolor={dvipsnames, svgnames, x11names, table}, 10pt]{beamer}
+\usepackage{./assets/preamble}
+
+\title{Lezione teoria}
+\date{21 settembre 2021}
+
+% arara: xelatex: { synctex: no }
+% arara: xelatex: { synctex: yes }
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+\frame{\titlepage}
+
+\section*{Sommario}
+\begin{frame}
+    \tableofcontents[pausesections]
+\end{frame}
+
+\begin{frame}{Recap}
+Ripasso lezione precendente:
+\begin{itemize}
+    \item Storia recente del \cplusplus;
+    \item Esempio di implementazione di composizione opzionale
+\end{itemize}
+Oggi:
+\begin{itemize}
+    \item riprendiamo i concetti della settimana scorsa;
+    \item ridefinizione degli operatori.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Metodi e operatori che esistono in una classe vuota}
+class A {};
+
+main() {
+    A a; // A::A()
+    A a2(a); // A::A(const A&)
+    a = a2; // A& A::operator=(const A& a)
+    A *pa = new();
+    [...]
+    delete pa; // cancella il puntatore
+    A::~A() // distruttore
+};
+
+\end{frame}
+
+\begin{frame}{Composizione opzionale}
+
+% importa immagine
+
+Soluzione con puntatore a B in A, la classe A ha la responsabilità di gestire la memoria in cui si trova l'oggetto di tipo B.
+\end{frame}
+
+% \begin{frame}[fragile]{Differenza fra copia profonda e copia superficiale}
+Class A {
+    int i;
+}
+    A::A(const A&)
+    A& A::operator=(const A& a)
+// fanno una copia superficiale ovvero gli attributi dell'oggetto vengono copiati in questo caso i
+Class A {
+    int i;
+    B *pb;
+} // anche in questo caso viene copiato il valore contenuto in i e in pb.
+
+%     Che cosa succede se il puntatore contiene un indirizzo ottenuto tramite una new e di cui la classe A è responsabile (come nel caso della composizione opzionale)?
+    
+%     \begin{block}{Copia del puntatore}
+%     Viene copiato il puntatore e non l'area di memoria assegnata.
+%     \end{block}
+    
+%     \begin{minted}[%
+%         tabsize=4,
+%         fontsize=\scriptsize,
+%         framesep=2mm]{cpp}
+% Class A {
+%     int i;
+%     B *pb;
+% }
+%     \end{minted}
+    
+%     Anche in questo caso viene copiato il valore contenuto in i e in pb.
+
+    % \begin{minted}[%
+    %     tabsize=4,
+    %     fontsize=\scriptsize,
+    %     framesep=2mm]{cpp}
+    % class A {
+    %     int i;
+    %     B* pb;
+    % };
+    % main () {
+    %     A a; // A::A()
+    %     [...] // codice che inizializza a.pb=new B 
+    
+    %     A a2(a); // A::A(const A&)
+    %     // Quanti B ci sono?
+    %     A a3;
+    %     a3 = a2; // A& A::operator=(const A& a)
+    %     // Quanti B ci sono?
+    %     A *pa=new();
+    %     ...(*pa)=a;
+    %     delete pa;
+    %     A::~A()
+    % };
+    % \end{minted}
+
+%     Con la copia superficiale diverse istanze di A hanno A::pb che punta alla \textbf{stessa} istanza di B!
+%     Grosso guaio se non lo si desidera.
+
+%     La soluzione è ridefinire costruttore di copia e operatore di assegnazione che, lasciati nella versione che esiste \textbf{sempre}, farebbero la sola copia superficiale.
+    
+%     Per questo nell'esempio illustrato nella scorsa lezione abbiamo ridefinito \mintinline{cpp}{A::A(const A&)} e \mintinline{cpp}{A& A::operator=(const A& a)}.
+% \end{frame}
+
+% \begin{frame}{Costruttori con parametri}
+%     Quando si definisce un costruttore con parametri il costruttore \mintinline{cpp}{A::A()} non c’e’ più nella versione di default occorre ridefinirlo per poterlo usare.
+
+%     Nel nostro esempio \mintinline{cpp}{A::A(int_i){ i=_i; }} fa sì che non si possa più dichiarare \mintinline{cpp}{A a;} il compilatore darà un messaggio di errore.
+
+%     Inoltre costruttori con un solo parametro svolgono in C++ il ruolo di \textbf{convertitori impliciti di tipo}.
+
+%     Che cosa significa?
+% \end{frame}
+
+% \begin{frame}[fragile]{Frame Title}
+%     Supponiamo di avere una classe fatta così:
+% \begin{minted}{cpp}
+% class A{
+%     int i;
+% public:
+%     A(int _i); // costruttore pubblico senza implementazione
+% };
+% \end{minted}
+
+% E di avere anche un funzione \mintinline{cpp}{void f(A);}
+
+% % Se la funzione f fosse chiamata con \mintinline{cpp}{f(3)} il sistema di deduzione dei tipi del C++ la compilerebbe come se fosse \mintinline{cpp}{f(A::A(3))} o equivalentemente \mintinline{cpp}{f(A(3))} senza aver bisogno dello scope.
+
+% % Come caso particolare questo avviene anche in casi come questo
+
+% % \begin{minted}{cpp}
+% % A a;
+% % a = 3; // diventa A& A::operator=(A(3));
+% % \end{minted}
+
+
+
+% % La conversione di tipo implicita causata dalla presenza di costruttori ad un parametro può essere desiderabile in alcuni casi, in altri il programmatore vorrebbe evitarla per fare questo si usa la parola chiave del linguaggio \mintinline{cpp}{explicit}.
+
+% % Supponiamo di modificare la classe in questo modo:  
+% % \begin{minted}{cpp}
+% % class A{
+% %     int i;
+% % public:
+% %     explicit A(int _i); // costruttore dichiarato explicit
+% % };
+% % \end{minted}
+
+% % Se la funzione void \mintinline{cpp}{f(A)} fosse chiamata con \mintinline{cpp}{f(3)} il sistema di deduzione dei tipi del \cplusplus sarebbe inibito dalla dichiarazione \mintinline{cpp}{explicit} a condursi a \mintinline{cpp}{f(A(3)} e darebbe un errore di compilazione.
+
+% % Come caso particolare questo avviene anche in casi come questo
+
+% % \begin{minted}{cpp}
+% % A a;
+% % a = 3; // errore di compilazione
+% % a = A(3); // conversione esplicita
+% % a = A(3,"stringa");
+% % \end{minted}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{Ridefinizione degli operatori}
+% Il linguaggio \cplusplus supporta la ridefinizione degli operatori.
+% Gli operatori sono le operazioni che appaiono nelle espressioni.
+
+% Supponiamo di avere \mintinline{cpp}{A a1,a2, a3, a4;} nell'espressione \mintinline{cpp}{a1 = (a2+a3)*(++a4);} compaiono tre operatori \mintinline{cpp}{operator=}, \mintinline{cpp}{operator+}, \mintinline{cpp}{operator*} e \mintinline{cpp}{operator++}. 
+
+% \mintinline{cpp}{operator++} ha un solo operando mentre \mintinline{cpp}{operator=}, \mintinline{cpp}{operator+}, \mintinline{cpp}{operator*} ne hanno due.
+
+% Gran parte degli operatori che sono definiti per i tipi base si possono ridefinire per tipi definiti dall'utente (classi).
+
+% Gran parte degli operatori si possono ridefinire o come metodi della classe o come funzioni esterne, ma \textbf{non} le due cose assieme.
+
+% \textbf{Quando si ridefiniscono come metodi} il primo operando corrisponde all'istanza chiamante e gli altri (se ve ne sono) a parametri del metodo.
+
+% \textbf{Quando si ridefiniscono come funzioni esterne} alla classe \textbf{tutti} gli operandi corrispondono a parametri della funzione.
+
+% operator= si puo' ridefinire \textbf{solo} come metodo ovvero
+
+% A& A::operator=(const A&)
+
+% Esempio di chiamata degli operatori consideriamo operator+ e vogliamo scrivere 
+
+% A a,a1,a2;
+% a = a1 + a2; // corretto 
+
+% Ridefinito operator+ \textbf{come metodo} a = a1 + a2; corrisponde alla chiamata A::operator=(a1.operator+(a2)); // corretto
+
+% Ridefinito operator+ \textbf{come funzione esterna} \mintinline{cpp}{a=a1+a2;} corrisponde alla chiamata \mintinline{cpp}{A::operator=(operator+(a1,a2)); // corretto}
+
+% \begin{block}{operator=}
+% Ribadiamo che operator= può essere ridefinito \textbf{solo} come metodo.
+% \end{block}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{L'implementazione di operator+ \alert{come metodo}}
+% Vediamo ora l'implementazione di operator+ come metodo
+
+% \begin{minted}{cpp}
+% class A{
+%     int i;
+% public:
+%     A(int _i){i=_i;}
+%     A operator+(const A&);
+% };
+
+% A A::operator+(const A& _a) {
+%     return A(i + _a.i);
+% }
+% \end{minted}
+
+% \begin{minted}{cpp}
+% A a1(1), a2(2), a3(3);
+% a1 = a2 + a3; // ok
+% a1 = 2 + a3; // non compila
+% a1 = a2 + 3; // a1.operator=(a2.operator+(A(3))); compila grazie alla conversione implicita di tipo
+% \end{minted}
+% \end{frame}
+
+% \begin{frame}[fragile]{L'implementazione di operator+ \alert{come funzione}}
+% \begin{minted}{cpp}
+% class A{
+%     int i;
+% public:
+%     A(int _i){ i=_i; } // corretto
+%     friend A operator+(const A&,const A&);
+% };
+
+% A operator+(const A& _x, const A& _y) { //corretto anche lo scope
+%     return A(_x.i + _y.i);
+% }
+% \end{minted}
+
+% \begin{minted}{cpp}
+% A a1(1), a2(2), a3(3);
+% a1 = a2 + a3; //ok
+% a1 = 2 + a3; // a1.operator=(operator+(A(2),a3)) compila grazie alla conversione implicita di tipo
+% a1 = a2 + 3; //a1.operator=(operator+(a2,A(3))) compila grazie alla conversione implicita di tipo
+% \end{minted}
+% \end{frame}
+
+% \begin{frame}{Parola chiave \texttt{friend}}
+% Nell'ultimo esempio è stata impiegata la parola chiave \mintinline{cpp}{friend}.
+
+% Quando dentro una classe compare questa parola chiave la riga \textbf{non} è una dichiarazione di funzione o metodo ma più semplicemente \textbf{permette l'accesso alle parti private da parte di una funzione o anche classe definita altrove}.
+
+% \mintinline{cpp}{friend} non è necessario per definire operatori se gli attributi sono accessibile tramite metodi pubblici per esempio un metodo \mintinline{cpp}{A::get_i(){ return i; }}.
+
+% \begin{block}{Attenzione}
+% La parola chiave \mintinline{cpp}{friend} va usato con parsimonia perché mina l’incapsulamento della classe.
+% \end{block}
+
+% \end{frame}
+
+% \begin{frame}[fragile]{operatori di incremento e decremento}
+% Gli operatori di incremento e decremento permettono di scrivere espressioni del tipo
+
+% \begin{minted}{cpp}
+% A a;
+% ++a; a++; --a; a--;
+% \end{minted}
+
+% Sono operatori ad un solo operando e \textbf{possono essere ridefiniti sia come metodi che come funzioni esterne}.
+
+% Entrambi hanno una versione prefissa e una postfissa:
+% \begin{itemize}
+%     \item nella prefissa prima si modifica la variabile e poi la si restituisce;
+%     \item nella versione postfissa il valore restituito è il valore esistente \textbf{prima} della modifica.
+% \end{itemize}
+
+% Entrambi possono essere modificati in \cplusplus, per distinguere  viene usato nella versione postfissa aggiungendo un parametro \mintinline{cpp}{int} \enquote{dummy}, quindi nel caso di implementazione come metodi si ha che gli operatori vanno dichiarati come:
+% \begin{minted}{cpp}
+% A& A::operator++();   // prefisso
+% A A::operator++(int); // postfisso
+% \end{minted}
+% \end{frame}
+
+% \begin{frame}[fragile]{Operatori di incremento prefisso}
+% \begin{minted}{cpp}
+% Class A {
+%     int i;
+%     A& A::operator++(); // prefisso
+% };
+
+% A& A::operator++() {
+%     ++i;
+%     return *this;
+% }
+% \end{minted}
+
+% Questo permettere di scrivere cose come \mintinline{cpp}{A a; ++(++a);}
+% \end{frame}
+
+% \begin{frame}[fragile]{Operatori di incremento postfisso}
+% \begin{minted}{cpp}
+% Class A {
+%     int i;
+%     A A::operator++(int); // postfisso
+% };
+
+% A A::operator++(int) { 
+%     A temp(*this); // istanziata ugualmente all'istanza chiamante
+%     i++;
+%     return temp;
+% }
+% \end{minted}
+
+% Cosa succede se si scrivono cose come \mintinline{cpp}{A a; (a++)++;} ?
+
+% \pause
+% La variabile a viene incrementata solo una volta perché viene effettuata una copia.
+% \end{frame}
+
+\begin{frame}[fragile]{Distinzione importante sul tipo di ritorno}
+Ci sono operatori che ritornano il risultato per valore e operatori che ritornano il risultato per referenza.
+
+Come nel caso degli incrementi o decrementi prefissi o postfissi la distinzione si ha quando il risultato e’ utilizzato successivamente nella stessa espressione.
+
+Gli operatori che modificano l'oggetto chiamante ritornando una reference.
+Esempio: \mintinline{cpp}{operator+=} e \mintinline{cpp}{operator+} il primo ritornerà \mintinline{cpp}{A&} mentre il secondo \mintinline{cpp}{A}.
+
+\begin{block}{Nota importante}
+Il C++ permette di ridefinire gli operatori anche fra tipi disomogenei.
+\end{block}
+\end{frame}
+
+\begin{frame}{Elenco degli operatori}
+Una lista molto chiara si può trovare su \href{https://en.wikipedia.org/wiki/Operators\_in\_C\_and\_C\%2B\%2B}{Wikipedia \ExternalLink}.
+
+\textbf{Quando è utile ridefinire gli operatori?}
+\begin{itemize}[<+- | alert@+>]
+    \item nella programmazione generica ci sono librerie che assumono l'esistenza di operatori. Esempio: il \mintinline{cpp}{std::set<A>} richiede che sia ridefinito \mintinline{cpp}{operator<};
+    \item quando il significato degli operatori è \enquote{naturale} (per esempio in una classe per supportare l'uso di numeri complessi \href{https://www.cplusplus.com/reference/complex/complex/operators/}{(cplusplus reference \ExternalLink)} e questo aiuta la comprensibilità;
+    \item altrimenti vanno usati con parsimonia e cautela.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Consegna lavoro a gruppi}
+
+Come affrontare la consegna:
+\begin{itemize}
+    \item scegliete nel vostro gruppo un operator dalla pagina di Wikipedia e discutetene la ridefinizione fra di voi.
+    \item scrivete un esempio di classe con quell'operatore ridefinito.
+    \item non limitatevi a quelli semplici: si \enquote{vince} :-) se nessun altro gruppo ha scelto lo stesso.
+    \item decidete chi lo presenta.
+\end{itemize}
+
+\end{frame}
+
+\end{document}

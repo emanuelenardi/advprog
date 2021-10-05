@@ -1,0 +1,209 @@
+\documentclass[xcolor={dvipsnames, svgnames, x11names, table}, 10pt]{beamer}
+\usepackage{./assets/preamble}
+
+\title{Ridefinizione degli operatori ed ereditarietà}
+\date{29 settembre 2021}
+
+% arara: xelatex: { synctex: no }
+% arara: xelatex: { synctex: yes }
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+\frame{\titlepage}
+
+\section*{Sommario}
+\begin{frame}
+    \tableofcontents[pausesections]
+\end{frame}
+
+\section{Esempio dei complessi}
+
+\begin{frame}[fragile]{\texttt{complesso.h}}
+
+\begin{columns}
+    \column{\dimexpr\paperwidth-30pt}
+    \only<1>{\cppfilepath[lastline=21]{complex/complesso.h}}
+    \only<2>{\cppfilepath[firstline=23]{complex/complesso.h}}
+\end{columns}
+\vspace*{\fill}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{complesso.cpp}}
+
+    \only<1>{\cppfilepath[firstline=1, lastline=17]{complex/complesso.cpp}}
+    \only<2>{\cppfilepath[firstline=19, lastline=34]{complex/complesso.cpp}}
+    \only<3>{\cppfilepath[firstline=36, lastline=52]{complex/complesso.cpp}}
+    \only<4>{\cppfilepath[firstline=54, lastline=74]{complex/complesso.cpp}}
+
+\end{frame}
+
+\begin{frame}[fragile]{\texttt{main.cpp}}
+
+\cppfilepath{complex/main.cpp}
+
+\end{frame}
+
+\begin{frame}{Breakout rooms: consegna}
+    \begin{itemize}
+        \item Scegliete nel vostro gruppo un operator dalla \href{https://en.wikipedia.org/wiki/Operators\_in\_C\_and\_C\%2B\%2B}{pagina di Wikipedia \enquote{Operators in \cplusplus} \ExternalLink} e discutetene la ridefinizione fra di voi
+        \item Scrivete un esempio di classe con quell'operatore ridefinito. Un esempio \enquote{tecnico} non importa che la classe sia realistica.
+        \item Non limitatevi a quelli semplici: si \enquote{vince} se nessun altro gruppo ha scelto lo stesso.
+        \item Decidete chi lo presenta prima che vengano chiuse le \foreign{breakout rooms}.
+    \end{itemize}
+\end{frame}
+
+\section{Ereditarietà in \cplusplus}
+
+\begin{frame}{Ereditarietà in \cplusplus}
+    \begin{itemize}
+        \item Esistono tipi di ereditarietà: \texttt{public}, \texttt{private}, \texttt{protected};
+        \item le stesse \foreign{keywords} della visibilità nella classe;
+    \end{itemize}
+    
+    \begin{alertblock}{Attenzione}
+        L'ereditarietà ha consequenza sulla visibilità.
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Visibilità delle classi in B}
+
+\begin{center}
+    \begin{tabular}{@{} *{5}{l} @{}}
+    \toprule
+        & & \multicolumn{3}{c}{Visibilità classe base \texttt{B}} \\
+    \cmidrule{3-5}
+        \multirow{5}{*}{\rotatebox[origin=c]{90}{\parbox[c]{3.5cm}{\centering Ereditarietà classe derivata \texttt{D}}}} &  & \texttt{public} & \texttt{private} & \texttt{protected} \\
+    \cmidrule(l){2-5}
+        & \texttt{public} & Everyone & B & B/D \\
+    \cmidrule(l){2-5}
+        & \texttt{public} & Everyone & B & B/D \\
+    \cmidrule(l){2-5}
+        & \texttt{private} & Everyone & \centered{-} & D \& \foreign{such} \\
+    \cmidrule(l){2-5}
+        & \texttt{protected} & D \& \foreign{such} & \centered{-} & D \& \foreign{such} \\
+    \bottomrule
+    \end{tabular}
+\end{center}
+    
+\end{frame}
+
+\begin{frame}{Visibilità delle classi nella classe base}
+
+\begin{center}
+    \begin{tabular}{@{} *{5}{l} @{}}
+    \toprule
+        & & \multicolumn{3}{c}{Visibilità classe base}\\
+    \cmidrule(l){3-5}
+        \multirow{5}{*}{\rotatebox[origin=c]{90}{\parbox[c]{3.5cm}{\centering Ereditarietà classe derivata}}} & & \texttt{public} & \texttt{private} & \texttt{protected} \\
+    \cmidrule(l){3-5}
+        & \texttt{public} & & & \\
+    \cmidrule(l){2-5}
+        & \texttt{public} & Public & Inaccessibile & Protected \\
+    \cmidrule(l){2-5}
+        & \texttt{private} & Private & Inaccessibile & Private \\
+    \cmidrule(l){2-5}
+        & \texttt{protected} & Protected & Inaccessibile & Protected \\
+    \bottomrule
+    \end{tabular}
+\end{center}
+    
+\end{frame}
+
+\begin{frame}{Istanza di una classe derivata}
+
+Istanziata una classe derivata questa può essere acceduta sia come istanza della classe derivata sia come istanza della classe base.
+
+In particolare i puntatori alla classe base possono essere usati per puntare ad un istanza della classe derivata.
+
+\begin{alertblock}{Attenzione}
+Un'istanza di una classe derivata può essere assegnata ad un'istanza di una classe base ma non il contrario.
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}{Keyword \texttt{virtual}}
+
+I metodi possono essere definiti \texttt{virtual}.
+
+\'{E} il modo in cui in \cplusplus si dichiara il \foreign{late binding} rispetto all'\foreign{early binding}:
+\begin{itemize}
+    \item l'\textbf{\foreign{early binding}} viene risolto durante la compilazione (\foreign{compile-time});
+    \item il \textbf{\foreign{late binding}} viene risolto a tempo di esecuzione (\foreign{run-time}).
+\end{itemize}
+
+\begin{block}{Quando si può usare il \foreign{late-binding}}
+    \foreign{late binding} solo se si accede tramite puntatore o reference.
+\end{block}
+
+\end{frame}
+
+\begin{frame}[fragile]{Esempio di \alert{classe base}: \texttt{a.h}}
+
+    \only<1>{\cppfilepath[firstline=1, lastline=7]{inheritance/a.h}}
+    \only<2>{\cppfilepath[firstline=8, lastline=23]{inheritance/a.h}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Esempio di \alert{classe base}: \texttt{a.cpp}}
+
+    \only<1>{\cppfilepath[lastline=20]{inheritance/a.cpp}}
+    \only<2>{\cppfilepath[firstline=22]{inheritance/a.cpp}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Esempio di \alert{classe derivata}: \texttt{b.h}}
+
+    \only<1>{\cppfilepath{inheritance/b.h}}
+
+\end{frame}
+
+\begin{frame}[fragile]{Esempio di \alert{classe derivata}: \texttt{b.cpp}}
+
+    \only<1>{\cppfilepath[lastline=17]{inheritance/b.cpp}}
+    \only<2>{\cppfilepath[firstline=19]{inheritance/b.cpp}}
+
+\end{frame}
+
+\begin{frame}{Esempio di classe \alert{\texttt{main}}: \texttt{main.cpp}}
+    
+    \only<1>{\cppfilepath[lastline=7]{inheritance/main.cpp}}
+    \only<2>{\cppfilepath[firstline=9, lastline=27]{inheritance/main.cpp}}
+    \only<3>{\cppfilepath[firstline=29]{inheritance/main.cpp}}
+    
+\end{frame}
+
+\section{Classe puramente virtuale}
+
+\begin{frame}[fragile]{Classe puramente virtuale}
+
+\begin{block}{Cos'è?}
+    Una classe puramente virtuale ha almeno un metodo puramente virtuale, ovvero che non viene implementato.
+\end{block}
+
+La dichiarazione di un metodo virtuale nella classe è seguita da \enquote{\texttt{=0;}}
+
+\begin{minted}{cpp}
+class A {
+    [...]
+    virtual int metodo() = 0;
+    [...]
+};
+\end{minted}
+    
+\begin{alertblock}{Attenzione}
+Una classe puramente virtuale \textbf{non} ha istanze.
+\end{alertblock}
+
+\end{frame}
+
+\begin{frame}{Esempio di classi puramente virtuali}
+
+\begin{itemize}
+    \item Classi puramente virtuali: personaggio e strumento;
+    \item Classi derivate specifiche.
+\end{itemize}
+
+\end{frame}
+
+\end{document}

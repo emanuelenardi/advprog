@@ -1,0 +1,516 @@
+\documentclass[xcolor={dvipsnames, svgnames, x11names, table}, 10pt]{beamer}
+\usepackage{./assets/preamble}
+
+\title{Programmazione generica e \texttt{STL}}
+\date{5 ottobre 2021}
+\institute{%
+    \textbf{Obiettivi di apprendimento}:
+    \begin{itemize}
+        \item operatori di conversione di tipo e come usarli;
+        \item cosa contiene la Standard Template Library.
+    \end{itemize}%
+}
+
+% \includeonlyframes{current}
+
+% arara: xelatex: { synctex: no }
+% arara: xelatex: { synctex: yes }
+% arara: latexmk: { clean: partial }
+\begin{document}
+
+\frame{\titlepage}
+
+% \section*{Riepilogo ultima lezione}
+% \begin{frame}{Riepilogo ultima lezione}
+% \begin{itemize}
+%     \item todo a cura del professore;
+%     \item todo a cura del professore;
+%     \item todo a cura del professore.
+% \end{itemize}
+% \end{frame}
+
+\section*{Sommario}
+\begin{frame}{Sommario}
+    \tableofcontents[
+        pausesections,
+        subsubsectionstyle=hide
+    ]
+\end{frame}
+
+\section{Programmazione generica}
+
+\begin{frame}{Programmazione generica}
+
+    \alert<1>{Si intende la possibilità data da un linguaggio di rappresentare tipi e implementare algoritmi che abbiano un tipo come parametro.}
+
+    \pause
+
+    \alert<2>{Il tipo parametrico viene poi specificato:
+    \begin{itemize}
+        \item a tempo di \textbf{compilazione} (es.\ \texttt{templates} in \cplusplus);
+        \item a tempo di \textbf{esecuzione} (es. \texttt{generics} in Java).
+    \end{itemize}}
+    
+    \pause
+    
+    \alert<3>{\begin{block}{Scopo}
+    Implementare algoritmi che siano indipendenti dal tipo su cui operano (\enquote{generici} appunto).
+    \end{block}}
+    
+    \pause
+    
+    \alert<4>{Idealmente al massimo livello di astrazione possibile, prendiamo come esempio lo \foreign{swapping} di variabili.}
+
+\end{frame}
+
+\subsection*{Esempio di scambio di variabili}°
+
+\begin{frame}[t, fragile]
+
+    \frametitle<1>{Swap overloading [1/3] --- \alert{definizione di funzioni}}
+    \only<1>{\cppfilepath[lastline=18]{example/example_overloading.cpp}}
+    
+    \frametitle<2>{Swap overloading [2/3] --- \alert{scambio variabili stringhe e intere}}
+    \only<2>{\addpage\cppfilepath[firstline=20, lastline=39]{example/example_overloading.cpp}}
+    
+    \frametitle<3>{Swap overloading [3/3] --- \alert{scambio variabili decimali}}
+    \only<3>{\addpage
+        \cppfilepath[firstline=41]{example/example_overloading.cpp}
+        
+        \begin{alertblock}{Attenzione}
+        Non è possibile effettuare la conversione automatica fra \texttt{double} e \texttt{int}.
+        \end{alertblock}%
+    }
+
+\end{frame}
+
+\subsection{Conversione di tipo (\texorpdfstring{\foreign{type conversion}}{type conversion})}
+
+\begin{frame}{La conversione di tipo}
+
+% https://en.wikipedia.org/wiki/Type_conversion
+% type conversion,[1][2] type casting,[1][3] type coercion,[3] and type juggling[4][5] are different ways of changing an expression from one data type to another. An example would be the conversion of an integer value into a floating point value or its textual representation as a string, and vice versa. Type conversions can take advantage of certain features of type hierarchies or data representations. Two important aspects of a type conversion are whether it happens implicitly (automatically) or explicitly,[1][6] and whether the underlying data representation is converted from one representation into another, or a given representation is merely reinterpreted as the representation of another data type.[6][7] In general, both primitive and compound data types can be converted.
+
+% Each programming language has its own rules on how types can be converted. Languages with strong typing typically do little implicit conversion and discourage the reinterpretation of representations, while languages with weak typing perform many implicit conversions between data types. Weak typing language often allow forcing the compiler to arbitrarily interpret a data item as having different representations—this can be a non-obvious programming error, or a technical method to directly deal with underlying hardware.
+
+% In most languages, the word coercion is used to denote an implicit conversion, either during compilation or during run time. For example, in an expression mixing integer and floating point numbers (like 5 + 0.1), the compiler will automatically convert integer representation into floating point representation so fractions are not lost. Explicit type conversions are either indicated by writing additional code (e.g. adding type identifiers or calling built-in routines) or by coding conversion routines for the compiler to use when it otherwise would halt with a type mismatch.
+
+\end{frame}
+
+\subsubsection{Conversione di tipo nei linguaggi \texttt{C}}
+
+\begin{frame}[t, fragile]{La conversione di tipo}
+
+% In the C family of languages and ALGOL 68, the word cast typically refers to an explicit type conversion (as opposed to an implicit conversion), causing some ambiguity about whether this is a re-interpretation of a bit-pattern or a real data representation conversion. More important is the multitude of ways and rules that apply to what data type (or class) is located by a pointer and how a pointer may be adjusted by the compiler in cases like object (class) inheritance.
+
+\uncover<+>{\cplusplus è un \textbf{linguaggio fortemente tipato}.
+\textbf{Molte conversioni}, soprattutto quelle che implicano una diversa interpretazione del valore, \textbf{richiedono una conversione esplicita}.}
+
+\uncover<+>{\textbf{Finora conosciamo due notazioni} per la conversione di tipo \emph{esplicita}: quella funzionale e quella simile a C.}
+\begin{overprint}
+    
+    \onslide<2->
+    \begin{minted}{cpp}
+    short a = 2000;
+    int b;
+    
+    b = (int) a; // c-like cast notation
+    b = int (a); // functional notation
+    \end{minted}
+
+\end{overprint}
+\only<+>{\textbf{Quali sono} gli operatori di conversione di tipo che ci mette a disposizione il linguaggio? \textbf{Come si differenziano} fra di loro? \textbf{Quando usare} un tipo di conversione al posto di un altro?}
+
+% https://www.cplusplus.com/doc/oldtutorial/typecasting/
+% https://www.cplusplus.com/doc/tutorial/typecasting/
+\end{frame}
+
+\subsubsection{Tipi di casting in \cplusplus}
+
+\begin{frame}[t, fragile]{Tipi di casting in \cplusplus}
+
+    Esistono cinque diverse \alert<1->{\textbf{conversioni di tipo}} in \cplusplus:
+
+    \begin{enumerate}[<+- | alert@+>]
+        \item \textbf{implicita} (\foreign{using the assignment operator});
+        \item \textbf{esplicita} (\foreign{using the cast notation});
+        \item \textbf{statica} (\foreign{using} \texttt{static\_cast});
+        \item \textbf{dinamica} (\foreign{using} \texttt{dynamic\_cast});
+        \item \textbf{costante} (\foreign{using} \texttt{const\_cast});
+        \item \textbf{reinterpretata} (\foreign{using} \texttt{reinterpret\_cast}).
+    \end{enumerate}
+    
+    \begin{overprint}
+    \onslide<1>
+    \begin{minted}{cpp}
+    int a = 5, b = 2;
+    int c = a/b; // 5/2 = 2.5 -> float
+    \end{minted}
+    
+    \begin{block}{Quando utilizzarlo?}
+    La conversione di tipo implicita\dots
+    \end{block}
+    
+    \onslide<2>
+    \begin{minted}{cpp}
+    2
+    \end{minted}
+        
+    \begin{block}{Quando utilizzarlo?}
+    La conversione di tipo esplicita\dots
+    \end{block}
+    
+    \onslide<3>
+    \begin{minted}{cpp}
+    3
+    \end{minted}
+    
+    \begin{block}{Quando utilizzarlo?}
+    La conversione di tipo statica\dots
+    \end{block}
+    
+    \onslide<4>
+    \begin{minted}{cpp}
+    4
+    \end{minted}
+        
+    \begin{block}{Quando utilizzarlo?}
+    La conversione di tipo dinamica\dots
+    \end{block}
+    
+    \onslide<5>
+    \begin{minted}{cpp}
+    5
+    \end{minted}
+        
+    \begin{block}{Quando utilizzarlo?}
+    La conversione di tipo costante\dots
+    \end{block}
+    
+    \onslide<6>
+    \begin{minted}{cpp}
+    6
+    \end{minted}
+    
+    \begin{block}{Quando utilizzarlo?}
+    La conversione di tipo reinterpretata\dots
+    \end{block}
+    \end{overprint}
+    
+    % https://stackoverflow.com/questions/28235805/type-casting-in-c
+    % https://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
+\end{frame}
+
+\subsection{Esempi con codice}
+
+\subsubsection{Swap \texttt{void*} C-style casting}
+
+\begin{frame}[t, fragile]
+
+    \frametitle<1>{Swap \texttt{void*} C-style casting [1/3]}
+    \only<1>{\cppfilepath[lastline=10]{example/example_void_pointer1.cpp}}
+    
+    \frametitle<2>{Swap \texttt{void*} C-style casting [2/3]}
+    \only<2>{\addpage\cppfilepath[firstline=12]{example/example_void_pointer1.cpp}}
+
+\end{frame}
+
+\subsubsection{Swap \texttt{void*} \texttt{static\_casting}}
+
+\begin{frame}[t, fragile]
+
+\begin{columns}
+    \column{\dimexpr\paperwidth-30pt}
+    
+    \frametitle<1>{Swap \texttt{void*} \alert{\texttt{static\_casting}} [1/2]}
+    \only<1>{\cppfilepath[lastline=10]{example/example_void_pointer2.cpp}}
+    
+    \frametitle<2>{Swap \texttt{void*} \alert{\texttt{static\_casting}} [2/2]}
+    \only<2>{\addpage\cppfilepath[firstline=12]{example/example_void_pointer2.cpp}}
+    
+    % \frametitle<3>{Swap \texttt{void*} \alert{\texttt{static\_casting}} [3/3]}
+    % \only<3>{\addpage\cppfilepath[firstline=20]{example/example_void_pointer2.cpp}}
+
+\end{columns}
+
+\end{frame}
+
+\subsection{Swap template}
+
+\begin{frame}[t, fragile]
+
+\frametitle<1>{Swap template --- \alert{main} [1/2]}
+\only<1>{\cppfilepath[lastline=11]{example/example_template.cpp}}
+
+\frametitle<2>{Swap template --- \alert{main} [2/2]}
+\only<2>{\addpage\cppfilepath[firstline=13]{example/example_template.cpp}}
+
+\end{frame}
+
+\begin{frame}[t, fragile]{Swap template --- \alert{A.h} e \alert{B.h}}
+
+\cppfilepath{example/virtual/A.h}
+\cppfilepath{example/virtual/B.h}
+
+\end{frame}
+
+\begin{frame}[t, fragile]{Swap template --- \alert{B.cpp}}
+
+\cppfilepath{example/virtual/B.cpp}
+
+\end{frame}
+
+\begin{frame}[t, fragile]
+
+\cppfilepath{example/virtual/example_hierarchy.cpp}
+
+\end{frame}
+
+\subsubsection*{Diversi tipi}
+
+\colorlet{type1}{lime}
+\colorlet{type2}{Yellow}
+\colorlet{type3}{YellowOrange}
+\setlength{\fboxsep}{2pt}
+
+\begin{frame}[c, fragile]{Diversi tipi}
+\begin{minted}[linenos=false, fontsize=\large, baselinestretch=0.2, escapeinside=||]{cpp}
+template |\colorbox{type1}{<typename T>}|
+|\colorbox{type1}{T}| min (|\colorbox{type1}{T}| a, |\colorbox{type1}{T}| b) {
+    return a < b ? a : b;
+}
+
+template |\colorbox{type2}{<typename T1>}|, |\colorbox{type3}{typename T2>}|
+|\colorbox{type2}{T1}| min (|\colorbox{type2}{T1}| a, |\colorbox{type3}{T2}| b) {
+    return a < b ? a : b;
+}
+
+\end{minted}
+
+\end{frame}
+
+\subsubsection*{Class Pair}
+
+\begin{frame}[t, fragile]{Class Pair}
+
+\begin{columns}[t]
+
+\column{0.46\textwidth}
+\begin{minted}{cpp}
+template <typename F, typename S>
+class Pair {
+public:
+    Pair(const F& f, const S& s);
+    F get_first() const;
+    S get_second() const;
+private:
+    F first;
+    S second;
+};
+\end{minted}
+
+\column{0.57\textwidth}
+\begin{minted}[firstnumber=12]{cpp}
+template <typename F, typename S>
+Pair<F,S>::Pair(const F& f, const S& s) {
+    first = f;
+    second = s;
+};
+
+template <typename F, typename S>
+F Pair<F,S>::get_first() const {
+    return first;
+};
+
+
+template <typename F, typename S>
+S Pair<F,S>::get_second() const {
+    return second;
+};
+\end{minted}
+
+\end{columns}
+\end{frame}
+
+\section{Standard Template Library}
+
+\begin{frame}[t]{Standard Template Library}
+
+    La \textbf{Standard Template Library} (abbraviata con STL) è una libreria software inclusa nella libreria standard del linguaggio \cplusplus e fornisce quattro componenti:
+    \begin{enumerate}[<+- | alert@+>]
+        \item algoritmi (\foreign{algorithms});
+        \item contenitori (\foreign{containers});
+        \item funzioni (\foreign{functions});
+        \item iteratori (\foreign{iterators}) una \textbf{generalizzazione dei puntatori}.
+    \end{enumerate}
+
+    \begin{center}
+        \begin{tabular}{@{} ccc @{}}
+            \cmidrule(lr){1-2}
+        \end{tabular}
+    \end{center}
+
+    \only<1>{
+    Nella STL \textbf{sono inclusi numerosi algoritmi} per eseguire operazioni come la \textbf{ricerca} e l'\textbf{ordinamento}.
+    Tali algoritmi sono comunemente utilizzati per la manipolazione dei \foreign{container} in maniera indiretta, cioè solo tramite iteratori.
+    Molti di questi algoritmi operano su un intervallo del container definito dall'utente tramite due iteratori che indicano gli estremi dell'intervallo.}
+
+    \only<2>{
+    I contenitori della STL si dividono in \textbf{sequenziali} e \textbf{associativi}.
+    A loro volta, una parte dei contenitori sequenziali può essere definita come \textbf{adattatori}, in quanto sono in effetti delle interfacce ridotte e specializzate dei contenitori principali che non implementano iteratori nella loro interfaccia.}
+
+\end{frame}
+
+\subsection{Containers}
+
+\newlength\origleftmargini
+\setlength\origleftmargini\leftmargini
+\setlength{\leftmargini}{10pt}
+\begin{frame}{Containers}
+
+\begin{columns}[T,onlytextwidth]
+\column{0.35\textwidth}
+\textbf{Sequence} containers:
+\begin{itemize}
+    \item \texttt{vector}
+    \item \texttt{list}
+    \item \texttt{set}
+    \item \texttt{map}
+\end{itemize}
+
+\column{0.35\textwidth}
+Container \textbf{adaptors}:
+\begin{itemize}
+    \item \texttt{stack}
+    \item \texttt{queue}
+    \item \texttt{priority\_queue}
+\end{itemize}
+
+\column{0.35\textwidth}
+\textbf{Associative} containers:
+\begin{itemize}
+    \item \texttt{set}
+    \item \texttt{multiset}
+    \item \texttt{priority\_queue}
+    \item \texttt{map}
+    \item \texttt{multimap}
+\end{itemize}
+
+\end{columns}
+
+\vspace{10pt}
+\textbf{Unordered associative} containers:
+\begin{columns}[T,onlytextwidth]
+\column{0.4\textwidth}
+\begin{itemize}
+    \item \texttt{unordered\_set}
+    \item \texttt{unordered\_multiset}
+\end{itemize}
+
+\column{0.58\textwidth}
+\begin{itemize}
+    \item \texttt{unordered\_map}
+    \item \texttt{unordered\_multimap}
+\end{itemize}
+\end{columns}
+
+\vspace*{\fill}
+
+\href{https://www.cplusplus.com/reference/stl/}{Approfondisci su \texttt{cplusplus.com} \ExternalLink}
+
+\end{frame}
+\setlength{\leftmargini}{\origleftmargini}
+
+\subsection{Iterators}
+
+\begin{frame}[t]{Iterators}
+
+Un \texttt{iterator} è un \textbf{oggetto che, puntando a un elemento in un intervallo di elementi} (come un array o un contenitore), ha la capacità di scorrere (\foreign{to iterate}) gli elementi di quell'intervallo utilizzando un insieme di operatori (con almeno l'incremento \enquote{\texttt{+}\(\!\)\texttt{+}} e l'operatore di dereferenziazione \enquote{\texttt{*}}).
+
+\pause
+
+\textbf{La forma più ovvia di iteratore è un puntatore}: un puntatore può puntare agli elementi di un array e scorrere attraverso essi utilizzando l'operatore di incremento \enquote{\texttt{+}\(\!\)\texttt{+}}, ma sono possibili altri tipi di iteratori.
+Ad esempio, ogni tipo di contenitore (come una \texttt{list}) ha un tipo specifico di iteratore progettato per scorrere i suoi elementi.
+
+\pause
+
+\begin{alertblock}{Attenzione}
+Nota che mentre un puntatore è una forma di iteratore, non tutti gli iteratori hanno la stessa funzionalità dei puntatori.
+\end{alertblock}
+
+\href{https://www.cplusplus.com/reference/iterator/}{Approfondisci su \texttt{cplusplus.com} \ExternalLink}
+
+\end{frame}
+
+\subsection{Algorithms}
+
+\begin{frame}[t]{Algorithms}
+
+L'\foreign{header} \texttt{\(\textbf{<}\)algorithm\(\,\textbf{>}\)} \alert<1>{\textbf{definisce una raccolta di funzioni}} appositamente progettate per essere utilizzate su intervalli di elementi (\foreign{range}).
+
+\pause
+
+Un \foreign{range} è \alert<2>{\textbf{una qualsiasi sequenza di oggetti}} alla quale è possibile accedere tramite iteratori o puntatori, come un \texttt{array} o un'istanza di alcuni contenitori STL.
+\pause
+Si noti, tuttavia, che \alert<3>{\textbf{gli algoritmi operano tramite iteratori direttamente sui valori}}, \alert<3>{\textbf{non influenzando in alcun modo la struttura di ogni possibile contenitore}} (non influisce mai sulla dimensione o sull'allocazione dello spazio di archiviazione del contenitore).
+
+\pause
+Quindi gli algoritmi sono:
+\begin{itemize}
+    \item \textbf{basati sugli \foreign{iterators}};
+    \item \textbf{generici anche rispetto ai \foreign{containers}}.
+\end{itemize}
+
+\vspace*{\fill}
+
+\href{https://www.cplusplus.com/reference/algorithm/}{Approfondisci su \texttt{cplusplus.com} \ExternalLink}
+
+\end{frame}
+
+\subsection{Esempio di utilizzo di \texttt{STL}}
+
+\begin{frame}[t, fragile]{Esempio di utilizzo di STL}
+
+    \frametitle<1>{a.h}
+    \only<1>{\cppfilepath{STL/a.h}}
+    
+    \frametitle<2>{a.cpp}
+    \only<2>{\addpage\cppfilepath{STL/a.cpp}}
+    
+    \frametitle<3>{b.h}
+    \only<3>{\addpage\cppfilepath{STL/b.h}}
+    
+    \frametitle<4>{b.cpp}
+    \only<4>{\addpage\cppfilepath{STL/b.cpp}}
+    
+    \frametitle<5>{main.cpp [1/2]}
+    \only<5>{\addpage
+    \begin{columns}[t]
+    
+        \column{0.35\textwidth}
+        \cppfilepath[lastline=15]{STL/main.cpp}
+        
+        \column{0.65\textwidth}
+        \cppfilepath[firstline=17, lastline=31]{STL/main.cpp}
+
+    \end{columns}
+    }
+    
+    \frametitle<6>{main.cpp [2/2]}
+    \only<6>{\addpage\cppfilepath[firstline=33]{STL/main.cpp}}
+
+\end{frame}
+
+\begin{frame}{Riconoscimenti}
+L'ultima versione delle slides si trova sulla repository Github
+\begin{center}\Large
+    \href{https://www.github.com/emanuelenardi/advprog}{\faicon{code-fork} \textbf{github.com/emanuelenardi/advprog}}
+\end{center}
+
+Le slides sono state realizzate da \textbf{Emanuele Nardi} e sono rilasciate con licenza \doclicenseLongName.
+\begin{center}\large
+    \href{https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it}{\doclicenseIcon}
+\end{center}
+\end{frame}
+
+\end{document}

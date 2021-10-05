@@ -1,0 +1,186 @@
+\usepackage{./assets/settings/metropolis}
+\usepackage{./assets/settings/commands}
+
+\usepackage{appendixnumberbeamer}
+
+\usepackage{comment}
+\usepackage{polyglossia}
+\setmainlanguage{italian}
+\setotherlanguage{english}
+\usepackage{microtype}
+% \setsansfont[BoldFont={Fira Sans SemiBold}]{Fira Sans Book}
+
+% IDEA tabelle
+% NOTE 'array' - permette di creare delle colonne personalizzate
+% NOTE 'booktabs' - genera filetti professionali per le tabelle
+% NOTE 'makecell' -
+% NOTE 'multirow' - tabelle con righe multilinea
+\usepackage{
+	booktabs,
+	makecell,
+	multirow
+}
+
+\usepackage{textcomp}
+
+\newcommand{\centered}[1]{\multicolumn{1}{c}{#1}}
+
+\usepackage{graphicx}
+
+% NOTE linea sottile fra le righe di una tabella
+\setlength{\lightrulewidth}{0.1pt}
+\newcommand{\lightrule}{%
+	\arrayrulecolor{black!30}%
+	\midrule[\lightrulewidth]%
+	\arrayrulecolor{black}}
+
+% NOTE parole in lingue diverse dall'italiano (inglese)
+\NewDocumentCommand{\foreign}{m}{%
+	\foreignlanguage{english}{%
+		\emph{#1}%
+	}%
+}
+
+% this shows the outline at the beginning of every section,
+% highlighting the current section
+% \AtBeginSection[]
+% {
+%   \begin{frame}<beamer>
+%     \frametitle{Outline}
+%     \tableofcontents[
+%         currentsection,
+%         subsubsectionstyle=hide
+%     ]
+%   \end{frame}
+% }
+
+\usepackage[scale=2]{ccicons}
+
+\usepackage{minted}
+
+% \newmintinline[cppinline]{cpp}{}
+% \newmint[cppcode]{cpp}{}
+% \newmintedfile[cppfile]{cpp}{}
+
+\usemintedstyle{manni}
+
+\setminted{
+	breaklines = true,
+	breakanywhere,
+	breakaftersymbolpre = \raisebox{0ex}[0ex][0ex]{\ensuremath{\rhookswarrow}},
+	breakaftersymbolpost = \raisebox{0ex}[0ex][0ex]{\ensuremath{\rcurvearrowse}\space},
+	frame = none,
+	linenos = true,
+	fontsize = \scriptsize,
+	fontseries = bold,
+	numberblanklines = true,
+    mathescape,
+    obeytabs,
+    showtabs,
+    showspaces,
+    tabsize = 4,
+    numbersep = 6pt,
+    escapeinside = ||,
+    beameroverlays,
+    % texcomments, % rompe al build
+}
+
+\renewcommand{\theFancyVerbLine}{%
+    \ttfamily%
+    \textcolor[rgb]{0.15, 0.15, 0.15}{%
+        \tiny%
+        \arabic{FancyVerbLine}%
+    }%
+}
+
+\usepackage{xparse}
+
+% https://tex.stackexchange.com/questions/478582/
+\ExplSyntaxOn
+\NewDocumentCommand{\mintedpath}{m}
+ {
+  \seq_gset_split:Nnn \g_paulie_mintedpath_seq { } { #1 }
+  \seq_gput_left:Nn \g_paulie_mintedpath_seq { }
+ }
+
+\seq_new:N \g_paulie_mintedpath_seq
+
+\NewDocumentCommand{\cppfilepath}{O{}m}
+ {
+  \seq_map_inline:Nn \g_paulie_mintedpath_seq
+  {
+    \file_if_exist:nT { ##1 #2 }
+     {
+      \inputminted[#1]{cpp}{##1 #2}
+      \seq_map_break:
+     }
+  }
+ }
+\ExplSyntaxOff
+
+\mintedpath{%
+    {./assets/code/01-lezione/}%
+    {./assets/code/02-lezione/}%
+    {./assets/code/03-lezione/}%
+    {./assets/code/04-lezione/}%
+}
+
+% rispettare l'irdine con minted
+\usepackage[autostyle, italian=quotes]{csquotes}
+
+\subtitle{Programmazione Avanzata a.a.\ 2021/2022}
+\author[E.\ Blanzieri]{Enrico Blanzieri}
+\institute[UniTN]{Università degli Studi di Trento}
+\titlegraphic{\hfill\includegraphics[height=2cm]{assets/images/logo.png}}
+
+% NOTE automatically print the table of contents at the beginning of each section by adding the following code in the preamble
+% \AtBeginSection[]{%
+% \begin{frame}
+% \frametitle{Sommario}
+% \tableofcontents[currentsection]
+% \end{frame}%
+% }
+
+% \setbeamercovered{dynamic}
+\setbeamercovered{transparent}
+
+% \usepackage{xparse}
+
+\usepackage{tikz}
+
+\newcommand{\ExternalLink}{%
+\tikz[x=1.2ex, y=1.2ex, baseline=-0.05ex]{% 
+    \begin{scope}[x=1ex, y=1ex]
+        \clip (-0.1,-0.1) 
+            --++ (-0, 1.2) 
+            --++ (0.6, 0) 
+            --++ (0, -0.6) 
+            --++ (0.6, 0) 
+            --++ (0, -1);
+        \path[draw, 
+            line width = 0.5, 
+            rounded corners=0.5] 
+            (0,0) rectangle (1,1);
+    \end{scope}
+    \path[draw, line width = 0.5] (0.5, 0.5) 
+        -- (1, 1);
+    \path[draw, line width = 0.5] (0.6, 1) 
+        -- (1, 1) -- (1, 0.6);
+    }
+}
+
+% 'doclicense' - imposta la licenza per un documento
+\usepackage[
+	lang        = english,
+	type		= CC,
+	modifier	= by-nc-sa,
+	version		= 4.0,
+	imagewidth	= 4em
+]{doclicense}
+
+\usepackage{fontawesome}
+
+\hypersetup{bookmarksopen=true,bookmarksopenlevel=4}
+\setcounter{tocdepth}{4}
+
+\newcommand{\addpage}{\addtocounter{framenumber}{1}}
