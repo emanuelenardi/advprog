@@ -12,7 +12,7 @@
     \end{itemize}%
 }
 
-\includeonlyframes{current}
+% \includeonlyframes{current}
 
 % arara: xelatex: { synctex: no }
 % arara: xelatex: { synctex: yes }
@@ -77,6 +77,7 @@
     \only<3>{\addpage
         \cppfilepath[firstline=41]{example/example_overloading.cpp}
         
+        \pause
         \begin{alertblock}{Attenzione}
         Non è possibile effettuare la conversione automatica fra \texttt{double} e \texttt{\&int}.
         \end{alertblock}%
@@ -84,53 +85,58 @@
 
 \end{frame}
 
-% \subsection{Conversione di tipo (\texorpdfstring{\foreign{type conversion}}{type conversion})}
+% \begin{comment}
+\subsection{Conversione di tipo (\texorpdfstring{\foreign{type conversion}}{type conversion})}
 
-% \begin{frame}[t]{Le conversioni di tipo [1/2]}
+\begin{frame}[t]{Le conversioni di tipo [1/3]}
 
-% \alert<1>{\textbf{\foreign{type conversion}}, \textbf{\foreign{type casting}}, \textbf{\foreign{type coercion}}, e \textbf{\foreign{type juggling}} sono modi diversi di cambiare un'espressione da un tipo di dati a un altro.}
-% \pause
-% \alert<2>{Un esempio potrebbe essere la conversione di un valore intero in un valore in virgola mobile o la sua rappresentazione testuale come una stringa, e viceversa.}
-% \pause
-% \alert<3>{Le conversioni di tipo \textbf{possono sfruttare} alcune caratteristiche delle gerarchie dei tipi o delle rappresentazioni dei dati.}
-% \pause
+\alert<1>{\textbf{\foreign{type conversion}}, \textbf{\foreign{type casting}}, \textbf{\foreign{type coercion}}, e \textbf{\foreign{type juggling}} sono modi diversi di cambiare un'espressione da un tipo di dati a un altro.}
+\pause
+\alert<2>{Un esempio potrebbe essere la conversione di un valore intero in un valore in virgola mobile o la sua rappresentazione testuale come una stringa, e viceversa.}
+\pause
+\alert<3>{Le conversioni di tipo \textbf{possono sfruttare} alcune caratteristiche delle gerarchie dei tipi o delle rappresentazioni dei dati.}
+\pause
 
-% \alert<4>{Due aspetti importanti di una conversione di tipo sono se avviene \textbf{implicitamente} (automaticamente) o \textbf{esplicitamente}, e se \textbf{la rappresentazione dei dati sottostante viene convertita da una rappresentazione in un'altra}, o \textbf{se una data rappresentazione è semplicemente reinterpretata} come la rappresentazione di un altro tipo di dati.}
-% % In generale, possono essere convertiti sia i tipi di dati primitivi che composti.
+\alert<4>{Due aspetti importanti di una conversione di tipo sono se avviene \textbf{implicitamente} (automaticamente) o \textbf{esplicitamente}}, o \alert<5>{se \textbf{la rappresentazione dei dati sottostante viene convertita da una rappresentazione in un'altra}}, o \alert<6>{\textbf{se una data rappresentazione è semplicemente reinterpretata}} come la rappresentazione di un altro tipo di dati.
+% In generale, possono essere convertiti sia i tipi di dati primitivi che composti.
 
-% \end{frame}
+\end{frame}
 
-% \begin{frame}[t]{Le conversioni di tipo [2/2]}
+\begin{frame}[t]{Le conversioni di tipo [2/3]}
 
-% Ogni linguaggio di programmazione ha le sue regole su come i tipi possono essere convertiti.
-% I linguaggi con tipizzazione forte (\foreign{strong typing}) in genere eseguono poche conversioni implicite e scoraggiano la reinterpretazione delle rappresentazioni, mentre i linguaggi con tipizzazione debole (\foreign{weak typing}) eseguono molte conversioni implicite tra i tipi di dati.
-% Un linguaggio con tipizzazione debole spesso consente di forzare il compilatore a interpretare arbitrariamente un elemento con rappresentazioni diverse, questo può essere un errore di programmazione non ovvio o un metodo tecnico per gestire direttamente l'hardware sottostante.
-% \pause
+Ogni linguaggio di programmazione ha le sue regole su come i tipi possono essere convertiti: \alert<1>{i linguaggi con \textbf{tipizzazione forte} (\foreign{strong typing}) in genere \textbf{eseguono poche conversioni implicite} e \textbf{scoraggiano la reinterpretazione delle rappresentazioni}}, mentre \alert<2>{i linguaggi con \textbf{tipizzazione debole} (\foreign{weak typing}) eseguono molte conversioni implicite tra i tipi di dati.}
 
-% Nella maggior parte delle lingue, la parola \enquote{coercizione} (\textbf{\foreign{coercion}}) \textbf{viene utilizzata per denotare una conversione implicita}, sia durante la compilazione che durante il \foreign{runtime}.
-% \pause
-% Ad esempio, in un'espressione che mescola numeri interi e in virgola mobile (come \texttt{5 + 0.1}), il compilatore convertirà automaticamente la rappresentazione intera in rappresentazione in virgola mobile in modo che le frazioni non vengano perse.
-% \pause
-% \textbf{Le conversioni di tipo esplicite sono indicate scrivendo codice aggiuntivo} (ad esempio aggiungendo identificatori di tipo o chiamando funzioni integrate) o scrivendo funzioni di conversione per il compilatore da utilizzare quando, in assenza delle stesse, il compilatore interromperebbe l'esecuzione con una mancata corrispondenza del tipo (\foreign{type mismatch}).
+\uncover<3>{\alert<3>{Un linguaggio con tipizzazione debole spesso \textbf{consente di forzare il compilatore a interpretare arbitrariamente un elemento con rappresentazioni diverse}}}.%, questo può essere un errore di programmazione non ovvio o un metodo tecnico per gestire direttamente l'hardware sottostante.
 
-% % https://en.wikipedia.org/wiki/Type_conversion
+\end{frame}
 
-% \end{frame}
+\begin{frame}[t]{Le conversioni di tipo [3/3]}
+
+\alert<1>{Nella maggior parte delle lingue, la parola \enquote{coercizione} (\textbf{\foreign{coercion}}) \textbf{viene utilizzata per denotare una conversione implicita}, sia durante la compilazione che durante il \foreign{runtime}.}
+\pause
+
+\alert<2>{Ad esempio, in un'espressione che mescola numeri interi e in virgola mobile (come \texttt{5 + 0.1}), il compilatore convertirà automaticamente la rappresentazione intera in rappresentazione in virgola mobile in modo che le frazioni non vengano perse.}
+\pause
+
+\alert<3>{\textbf{Le conversioni di tipo esplicite sono indicate scrivendo codice aggiuntivo} (ad esempio aggiungendo identificatori di tipo o chiamando funzioni integrate) o scrivendo funzioni di conversione per il compilatore da utilizzare quando, in assenza delle stesse, il compilatore interromperebbe l'esecuzione con una mancata corrispondenza del tipo (\foreign{type mismatch}).}
+
+% https://en.wikipedia.org/wiki/Type_conversion
+
+\end{frame}
 
 \subsubsection{Conversione di tipo nei linguaggi \texttt{C}}
 
 \begin{frame}[t, fragile]{La conversione di tipo nei linguaggi \texttt{C}}
 
-Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce tipicamente ad una conversione di tipo esplicita (al contrario di una conversione implicita), causando qualche ambiguità sul fatto che si tratti di una reinterpretazione di un \foreign{bit-pattern} o di una conversione di rappresentazione di dati reali.
+\uncover<1->{Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce tipicamente ad una \textbf{conversione di tipo esplicita}.} %(al contrario di una conversione implicita), causando qualche ambiguità sul fatto che si tratti di una reinterpretazione di un \foreign{bit-pattern} o di una conversione di rappresentazione di dati reali.}
 % More important is the multitude of ways and rules that apply to what data type (or class) is located by a pointer and how a pointer may be adjusted by the compiler in cases like object (class) inheritance.
 
-\uncover<+>{\cplusplus è un \textbf{linguaggio fortemente tipato}.
+\uncover<2->{\cplusplus è un \textbf{linguaggio fortemente tipato}.
 \textbf{Molte conversioni}, soprattutto quelle che implicano una diversa interpretazione del valore, \textbf{richiedono una conversione esplicita}.}
-
-\uncover<+>{\textbf{Finora conosciamo due notazioni} per la conversione di tipo \emph{esplicita}: quella funzionale e quella simile a C.}
+\uncover<2->{\textbf{Finora conosciamo due notazioni}: quella funzionale e quella simile a C.}
 \begin{overprint}
     
-    \onslide<2->
+    \onslide<3->
     \begin{minted}{cpp}
     short a = 2000;
     int b;
@@ -140,7 +146,7 @@ Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce 
     \end{minted}
 
 \end{overprint}
-\only<+>{\textbf{Quali sono} gli operatori di conversione di tipo che ci mette a disposizione il linguaggio? \textbf{Come si differenziano} fra di loro? \textbf{Quando usare} un tipo di conversione al posto di un altro?}
+\only<4>{\textbf{Quali sono} gli operatori di conversione di tipo che ci mette a disposizione il linguaggio? \textbf{Come si differenziano} fra di loro? \textbf{Quando usare} un tipo di conversione al posto di un altro?}
 
 % https://www.cplusplus.com/doc/oldtutorial/typecasting/
 % https://www.cplusplus.com/doc/tutorial/typecasting/
@@ -174,7 +180,11 @@ Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce 
     
     \onslide<2>
     \begin{minted}{cpp}
-    2
+    short a = 2000;
+    int b;
+    
+    b = (int) a; // c-like cast notation
+    b = int (a); // functional notation
     \end{minted}
         
     \begin{block}{Quando utilizzarlo?}
@@ -183,11 +193,13 @@ Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce 
     
     \onslide<3>
     \begin{minted}{cpp}
-    3
+    int x=8, y=3;
+    float divisione;
+    divisione = static_cast<float>(x)/y;
     \end{minted}
     
     \begin{block}{Quando utilizzarlo?}
-    La conversione di tipo statica\dots
+    Si utilizza quando si è sicuri della validità della conversione perchè non c'è nessun controllo sulla compatibilità di tipi.
     \end{block}
     
     \onslide<4>
@@ -210,7 +222,10 @@ Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce 
     
     \onslide<6>
     \begin{minted}{cpp}
-    6
+    class A { /* ... */ };
+    class B { /* ... */ };
+    A *a = new A;
+    B *b = reinterpret_cast<B*>(a);
     \end{minted}
     
     \begin{block}{Quando utilizzarlo?}
@@ -221,6 +236,7 @@ Nella famiglia dei linguaggi C, la parola \enquote{\foreign{cast}} si riferisce 
     % https://stackoverflow.com/questions/28235805/type-casting-in-c
     % https://stackoverflow.com/questions/332030/when-should-static-cast-dynamic-cast-const-cast-and-reinterpret-cast-be-used
 \end{frame}
+% \end{comment}
 
 \subsection{Esempi con codice}
 
@@ -316,39 +332,39 @@ template |\colorbox{type2}{<typename T1>}|, |\colorbox{type3}{typename T2>}|
 
 \begin{columns}[t]
 
-\column{0.46\textwidth}
-\begin{minted}{cpp}
-template <typename F, typename S>
-class Pair {
-public:
-    Pair(const F& f, const S& s);
-    F get_first() const;
-    S get_second() const;
-private:
-    F first;
-    S second;
-};
-\end{minted}
-
-\column{0.57\textwidth}
-\begin{minted}[firstnumber=12]{cpp}
-template <typename F, typename S>
-Pair<F,S>::Pair(const F& f, const S& s) {
-    first = f;
-    second = s;
-};
-
-template <typename F, typename S>
-F Pair<F,S>::get_first() const {
-    return first;
-};
-
-
-template <typename F, typename S>
-S Pair<F,S>::get_second() const {
-    return second;
-};
-\end{minted}
+    \column{0.46\textwidth}
+    \begin{minted}{cpp}
+    template <typename F, typename S>
+    class Pair {
+    public:
+        Pair(const F& f, const S& s);
+        F get_first() const;
+        S get_second() const;
+    private:
+        F first;
+        S second;
+    };
+    \end{minted}
+    
+    \column{0.57\textwidth}
+    \begin{minted}[firstnumber=12]{cpp}
+    template <typename F, typename S>
+    Pair<F,S>::Pair(const F& f, const S& s) {
+        first = f;
+        second = s;
+    };
+    
+    template <typename F, typename S>
+    F Pair<F,S>::get_first() const {
+        return first;
+    };
+    
+    
+    template <typename F, typename S>
+    S Pair<F,S>::get_second() const {
+        return second;
+    };
+    \end{minted}
 
 \end{columns}
 \end{frame}
@@ -463,6 +479,12 @@ Nota che mentre un puntatore è una forma di iteratore, non tutti gli iteratori 
 
 \end{frame}
 
+\begin{frame}{}
+
+\includegraphics[width=\textwidth]{}
+
+\end{frame}
+
 \subsection{Algorithms}
 
 \begin{frame}[t]{Algorithms}
@@ -522,6 +544,6 @@ Quindi gli algoritmi sono:
 
 \end{frame}
 
-\Riconoscimenti
+%\Riconoscimenti
 
 \end{document}

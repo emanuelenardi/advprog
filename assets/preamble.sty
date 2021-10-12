@@ -21,7 +21,7 @@
 	multirow
 }
 
-\usepackage{textcomp}
+\usepackage{comment}
 
 \newcommand{\centered}[1]{\multicolumn{1}{c}{#1}}
 
@@ -65,24 +65,25 @@
 \usemintedstyle{manni}
 
 \setminted{
+    % showspaces, % crea caratteri inesistenti, non fa funzionare "autogobble"
+    escapeinside = ||,
+    beameroverlays,
+    % texcomments, % rompe la build
 	breaklines = true,
 	breakanywhere,
 	breakaftersymbolpre = \raisebox{0ex}[0ex][0ex]{\ensuremath{\rhookswarrow}},
 	breakaftersymbolpost = \raisebox{0ex}[0ex][0ex]{\ensuremath{\rcurvearrowse}\space},
-	frame = none,
 	linenos = true,
+	numberblanklines = true,
 	fontsize = \scriptsize,
 	fontseries = bold,
-	numberblanklines = true,
     mathescape,
     obeytabs,
     showtabs,
-    showspaces,
     tabsize = 4,
     numbersep = 6pt,
-    escapeinside = ||,
-    beameroverlays,
-    % texcomments, % rompe al build
+    highlightcolor=GreenYellow!65,
+    autogobble % remove all common leading whitespace from code.
 }
 
 \renewcommand{\theFancyVerbLine}{%
@@ -97,25 +98,21 @@
 
 % https://tex.stackexchange.com/questions/478582/
 \ExplSyntaxOn
-\NewDocumentCommand{\mintedpath}{m}
- {
-  \seq_gset_split:Nnn \g_paulie_mintedpath_seq { } { #1 }
-  \seq_gput_left:Nn \g_paulie_mintedpath_seq { }
- }
+\NewDocumentCommand{\mintedpath}{m}{
+    \seq_gset_split:Nnn \g_paulie_mintedpath_seq { } { #1 }
+    \seq_gput_left:Nn \g_paulie_mintedpath_seq { }
+}
 
 \seq_new:N \g_paulie_mintedpath_seq
 
-\NewDocumentCommand{\cppfilepath}{O{}m}
- {
-  \seq_map_inline:Nn \g_paulie_mintedpath_seq
-  {
-    \file_if_exist:nT { ##1 #2 }
-     {
-      \inputminted[#1]{cpp}{##1 #2}
-      \seq_map_break:
-     }
-  }
- }
+\NewDocumentCommand{\cppfilepath}{ O{} m }{
+    \seq_map_inline:Nn \g_paulie_mintedpath_seq {
+    \file_if_exist:nT { ##1 #2 } {
+        \inputminted[#1]{cpp}{##1 #2}
+        \seq_map_break:
+    }
+    }
+}
 \ExplSyntaxOff
 
 \mintedpath{%
@@ -123,6 +120,10 @@
     {./assets/code/02-lezione/}%
     {./assets/code/03-lezione/}%
     {./assets/code/04-lezione/}%
+}
+
+\graphicspath{
+    {./assets/images/}
 }
 
 % rispettare l'irdine con minted
